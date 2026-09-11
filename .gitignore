@@ -26,3 +26,4 @@ data/xbrl/
 data/raw_meta/company_tickers.json
 data/raw/
 data/index_cache/
+data/raw_meta/index_progress.json
