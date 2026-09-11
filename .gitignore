@@ -15,6 +15,14 @@ build/
 airflow/logs/
 airflow/airflow.db
 airflow/airflow.cfg
+*.log
+
+# Raw pulled data is large (hundreds of MB) and fully reproducible via
+# scripts/pull_sec_corpus.py — never committed. Only the lightweight
+# manifest (filings_index.json) is tracked, so the exact corpus that
+# was used is documented even without the raw files in git.
+data/corpus/
+data/xbrl/
+data/raw_meta/company_tickers.json
 data/raw/
 data/index_cache/
-*.log
