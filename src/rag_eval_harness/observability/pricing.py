@@ -2,7 +2,7 @@
 
 These are maintained by hand and will drift from list price over time --
 they exist so every query and every evaluation run carries a rough cost
-estimate for the observability layer (docs/adr/0004), not to be an
+estimate for the observability layer (docs/adr/0003), not to be an
 invoice-accurate ledger. Update the constants below if a provider
 changes pricing; nothing else in the codebase needs to change.
 
