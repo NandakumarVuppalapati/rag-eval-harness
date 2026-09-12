@@ -17,6 +17,40 @@ A RAG pipeline answers financial-research questions by retrieving passages from 
 
 ## Architecture
 
+```mermaid
+flowchart TD
+    EDGAR["SEC EDGAR<br/>10 companies, 10-K / 10-Q"]
+    INGEST["Ingestion<br/>parse + chunk"]
+    VOYIDX[("Pinecone index<br/>voyage-finance-2")]
+    OAIIDX[("Pinecone index<br/>text-embedding-3-small")]
+    API["FastAPI service<br/>retrieval + Claude Haiku generation"]
+    ENDPOINTS["query, health, metrics endpoints"]
+    GOLDEN["Golden dataset<br/>66 questions: numeric, narrative,<br/>cross-document, unanswerable"]
+    RAGAS["Evaluation harness<br/>Ragas, cross-family OpenAI judge"]
+    PG[("Postgres<br/>eval_runs, eval_question_results")]
+    REGR["Regression detection<br/>rolling baseline"]
+    AIRFLOW["Airflow scheduler<br/>06:00 UTC nightly"]
+    PROM["Prometheus"]
+    GRAF["Grafana dashboard"]
+
+    EDGAR --> INGEST
+    INGEST --> VOYIDX
+    INGEST --> OAIIDX
+    VOYIDX --> API
+    OAIIDX --> API
+    API --> ENDPOINTS
+    ENDPOINTS --> PROM
+    PROM --> GRAF
+
+    AIRFLOW --> GOLDEN
+    GOLDEN --> RAGAS
+    API --> RAGAS
+    RAGAS --> PG
+    PG --> REGR
+    REGR -->|regression found| AIRFLOW
+    PG --> GRAF
+```
+
 | Component | What it is |
 |---|---|
 | `src/rag_eval_harness/ingestion/` | Pulls real 10-K/10-Q filings from SEC EDGAR, parses and chunks them, embeds with both models, indexes into two Pinecone indexes |
