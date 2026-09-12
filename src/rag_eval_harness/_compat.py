@@ -48,5 +48,8 @@ def patch_ragas_vertexai_import() -> None:
                 "This project does not use Google Vertex AI."
             )
 
-    stub.ChatVertexAI = ChatVertexAI
+    # types.ModuleType has no static attributes by design -- this is a
+    # deliberate runtime monkeypatch (that's the whole point of this
+    # module), which no type checker can verify statically.
+    stub.ChatVertexAI = ChatVertexAI  # type: ignore[attr-defined]
     sys.modules[module_name] = stub

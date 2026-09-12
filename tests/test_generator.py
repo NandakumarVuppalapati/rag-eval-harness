@@ -15,12 +15,17 @@ from __future__ import annotations
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
+import pytest
+
 from rag_eval_harness.generation.generator import REFUSAL_TEXT, Generator
 
 
 def _fake_response(text: str) -> SimpleNamespace:
     return SimpleNamespace(
-        content=[SimpleNamespace(text=text)],
+        # Real Anthropic content blocks carry a discriminating `type` field
+        # (generator.py checks it to reject non-text blocks); include it here
+        # so this fixture actually matches the real response shape.
+        content=[SimpleNamespace(type="text", text=text)],
         usage=SimpleNamespace(input_tokens=100, output_tokens=20),
     )
 
@@ -67,3 +72,18 @@ def test_answer_that_merely_mentions_the_refusal_phrase_midway_is_not_a_refusal(
     generator = _generator_with_response(text)
     result = generator.generate("What were Apple's net sales?", chunks=[])
     assert result.refused is False
+
+
+def test_non_text_first_block_raises_instead_of_crashing_opaquely():
+    # generator.py never enables tools or extended thinking, so this
+    # shouldn't happen in practice -- but if it ever did, a bare
+    # response.content[0].text would raise an opaque AttributeError deep
+    # inside .strip(). This checks it fails loudly and informatively instead.
+    client = MagicMock()
+    client.messages.create.return_value = SimpleNamespace(
+        content=[SimpleNamespace(type="tool_use")],
+        usage=SimpleNamespace(input_tokens=100, output_tokens=20),
+    )
+    generator = Generator(client)
+    with pytest.raises(RuntimeError, match="Expected a text block"):
+        generator.generate("What were Apple's net sales?", chunks=[])

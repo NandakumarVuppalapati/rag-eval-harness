@@ -62,7 +62,11 @@ def ensure_indexes(pc: Pinecone) -> None:
 
 def embed_voyage(voyage_client: voyageai.Client, texts: list[str]) -> list[list[float]]:
     result = voyage_client.embed(texts, model=VOYAGE_MODEL, input_type="document")
-    return result.embeddings
+    # See the matching comment in retrieval/retriever.py._embed_query: voyageai's
+    # stubs allow int8-quantized output (list[int]), which this project never
+    # requests, so this normalizes to the float type the Pinecone index (and
+    # this function's own signature) actually expects.
+    return [[float(x) for x in embedding] for embedding in result.embeddings]
 
 
 def embed_openai(openai_client: openai.OpenAI, texts: list[str]) -> list[list[float]]:

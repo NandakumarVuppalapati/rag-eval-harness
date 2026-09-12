@@ -59,15 +59,18 @@ class Retriever:
 
     def _embed_query(self, query: str, model: EmbeddingModelName) -> tuple[list[float], int]:
         if model == "voyage":
-            result = self._voyage_client.embed([query], model="voyage-finance-2", input_type="query")
-            tokens = result.total_tokens
-            return result.embeddings[0], tokens
+            voyage_result = self._voyage_client.embed([query], model="voyage-finance-2", input_type="query")
+            # voyageai's stubs type embeddings as list[float] | list[int] to
+            # cover its optional int8 quantization mode, which this project
+            # never requests (no `output_dtype` passed above) -- the float()
+            # here is a no-op on the actual response, just a real runtime
+            # guarantee that matches this function's declared return type
+            # instead of trusting an overly-broad third-party stub.
+            embedding = [float(x) for x in voyage_result.embeddings[0]]
+            return embedding, voyage_result.total_tokens
         else:
-            result = self._openai_client.embeddings.create(
-                model="text-embedding-3-small", input=[query]
-            )
-            tokens = result.usage.total_tokens
-            return result.data[0].embedding, tokens
+            openai_result = self._openai_client.embeddings.create(model="text-embedding-3-small", input=[query])
+            return openai_result.data[0].embedding, openai_result.usage.total_tokens
 
     def retrieve(
         self,

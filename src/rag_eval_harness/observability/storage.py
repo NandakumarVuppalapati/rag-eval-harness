@@ -105,6 +105,12 @@ def load_run(engine: Engine, run: dict) -> int:
                 ragas_elapsed_s=run["ragas_elapsed_s"],
             )
         )
+        # SQLAlchemy types inserted_primary_key as possibly None (for
+        # statement forms that can't report it, e.g. multi-row inserts);
+        # a single-row insert() against a table with an autoincrement PK
+        # always populates it, so this asserts that guarantee explicitly
+        # rather than indexing into a value mypy correctly sees as optional.
+        assert result.inserted_primary_key is not None
         run_id = result.inserted_primary_key[0]
 
         rows = []

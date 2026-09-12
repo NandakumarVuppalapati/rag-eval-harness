@@ -88,7 +88,18 @@ class Generator:
         )
         latency_ms = (time.monotonic() - start) * 1000
 
-        answer = response.content[0].text.strip()
+        # response.content is a heterogeneous list of block types (text,
+        # tool-use, thinking, ...); only a TextBlock has .text. This project
+        # never enables tools or extended thinking, so the first block is
+        # always text in practice, but indexing [0].text blindly would crash
+        # opaquely the moment that stops being true -- exactly the kind of
+        # silent-until-it-isn't assumption this project exists to catch.
+        first_block = response.content[0]
+        if first_block.type != "text":
+            raise RuntimeError(
+                f"Expected a text block from Claude, got {first_block.type!r}: {response.content!r}"
+            )
+        answer = first_block.text.strip()
         input_tokens = response.usage.input_tokens
         output_tokens = response.usage.output_tokens
         cost = estimate_cost_usd(self._model, input_tokens, output_tokens)
