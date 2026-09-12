@@ -111,11 +111,16 @@ def make_judge():
     return llm, embeddings
 
 
+_RAGAS_METRIC_NAMES = ["faithfulness", "answer_relevancy", "context_precision", "context_recall"]
+
+
 def score_answerable(results: list[QuestionResult], llm, embeddings) -> dict:
     """Score the answerable slice (numeric + narrative + cross_document)
     with Ragas' faithfulness / answer_relevancy / context_precision /
     context_recall metrics. Returns per-question scores plus the
-    dataset-level aggregate Ragas computes."""
+    dataset-level aggregate (the mean of each metric's per-question
+    scores, computed here rather than trusting Ragas's own aggregate
+    object -- see the note below)."""
     from ragas import EvaluationDataset, evaluate
     from ragas.metrics import answer_relevancy, context_precision, context_recall, faithfulness
 
@@ -139,13 +144,21 @@ def score_answerable(results: list[QuestionResult], llm, embeddings) -> dict:
                 "id": r.id,
                 "category": r.category,
                 "embedding_model": r.embedding_model,
-                "faithfulness": _safe_float(row.get("faithfulness")),
-                "answer_relevancy": _safe_float(row.get("answer_relevancy")),
-                "context_precision": _safe_float(row.get("context_precision")),
-                "context_recall": _safe_float(row.get("context_recall")),
+                **{name: _safe_float(row.get(name)) for name in _RAGAS_METRIC_NAMES},
             }
         )
-    aggregate = {k: _safe_float(v) for k, v in dict(ragas_result).items()}
+    # NOTE: an earlier version of this function called dict(ragas_result) to
+    # get the dataset-level aggregate. Ragas 0.4.3's EvaluationResult only
+    # implements __getitem__(key: str) -- no keys()/__iter__ -- so dict()
+    # falls back to integer-indexed iteration and raises KeyError: 0 on the
+    # very first call. That path was never actually exercised end-to-end
+    # before real data made it this far (every prior run hit the OpenAI
+    # rate limit first), so the bug shipped invisibly. Computing the mean
+    # ourselves from scores_df avoids depending on that unstable API at all.
+    aggregate = {
+        name: _safe_float(scores_df[name].mean()) if name in scores_df.columns else None
+        for name in _RAGAS_METRIC_NAMES
+    }
     return {"per_question": per_question, "aggregate": aggregate}
 
 
