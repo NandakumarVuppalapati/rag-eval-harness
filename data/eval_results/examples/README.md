@@ -6,11 +6,12 @@ generation) for each embedding model, kept as committed examples of actual
 output rather than regenerated on every nightly run. Routine runs land in
 `data/eval_results/*.json` (gitignored) and Postgres, not here.
 
-Both were run with `--skip-ragas` (see `scripts/run_evaluation.py`'s module
-docstring): the Ragas judge (OpenAI `gpt-4o-mini`) was rate-limited at the
-time, and retrieval + generation don't need to be re-run just to wait out an
-unrelated provider's quota. Their `ragas` field is empty and `ragas_pending`
-is `true` until `scripts/score_ragas.py` backfills it.
+Both were first run with `--skip-ragas` (see `scripts/run_evaluation.py`'s
+module docstring): the Ragas judge (OpenAI `gpt-4o-mini`) was rate-limited
+at the time, and retrieval + generation don't need to be re-run just to
+wait out an unrelated provider's quota. `scripts/score_ragas.py` has since
+backfilled both files in place -- `ragas_pending` is now `false` and the
+real scores are below.
 
 ## What they already show, without Ragas
 
@@ -41,3 +42,37 @@ better than the general-purpose baseline for these financial questions,
 though neither is close to reliable yet. Both numbers are large enough to
 be a real finding, not noise, and are left as-is rather than tuned away,
 per this project's own stated purpose.
+
+## Now scored with Ragas
+
+Backfilling hit a second real bug along the way: ragas 0.4+'s
+`EvaluationResult` only implements `__getitem__(key: str)`, with no
+`keys()`/`__iter__`, so the original `dict(ragas_result)` used to build the
+aggregate raised `KeyError: 0` immediately -- a code path nothing had
+exercised end-to-end before, since every earlier attempt hit the OpenAI
+rate limit first. Fixed in `harness.py`'s `score_answerable` by computing
+each metric's mean directly from the per-question scores instead (see its
+docstring and the regression test in `tests/test_harness.py`).
+
+| Metric | `voyage-finance-2` | `text-embedding-3-small` |
+|---|---|---|
+| Faithfulness | 0.884 | 0.826 |
+| Answer relevancy | 0.467 | 0.437 |
+| Context precision | 0.360 | 0.470 |
+| Context recall | 0.514 | 0.567 |
+| Refusal rate (unanswerable slice) | 1.0 | 1.0 |
+
+These are computed over all 55 answerable questions, including the ones
+each model refused (a refusal scores near-zero on faithfulness and answer
+relevancy, since it doesn't attempt the question). Read next to the
+refusal counts above, the result is more nuanced than a single winner:
+`voyage-finance-2` refuses fewer answerable questions, and when it does
+answer, is judged more faithful to its retrieved context and more relevant
+to the question -- but on the two metrics that score retrieval quality
+directly, context precision and recall, the general-purpose baseline
+scores slightly higher. That isn't necessarily a contradiction: the two
+models refuse different questions, so they aren't being scored on the same
+subset of "hard" cases, and their precision/recall numbers aren't directly
+comparable on a level playing field. Flagging that honestly, rather than
+picking whichever framing tells the cleaner story, is the point of building
+an evaluation harness in the first place.

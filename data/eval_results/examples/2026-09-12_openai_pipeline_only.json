@@ -5,11 +5,512 @@
   "num_unanswerable": 11,
   "pipeline_elapsed_s": 131.72221935400012,
   "ragas_elapsed_s": 0.0,
-  "ragas_pending": true,
+  "ragas_pending": false,
   "total_generation_cost_usd": 0.1797340000000001,
   "ragas": {
-    "per_question": [],
-    "aggregate": {}
+    "per_question": [
+      {
+        "id": "numeric_000",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8170678178992762,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_001",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_002",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9083001241170324,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_003",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9136221604878317,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_004",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.7784741480330079,
+        "context_precision": 0.9166666666361111,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_005",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.5714285714285714,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_006",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.7368570460160623,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_007",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.7166458025389518,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_008",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_009",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.2,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.19999999998,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_010",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_011",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_012",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.249999999975,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_013",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_014",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_015",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.7142857142857143,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.249999999975,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_016",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.6666666666666666,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_017",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8614861741642894,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_018",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.6,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_019",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.3333333333333333,
+        "answer_relevancy": 0.8536422818882063,
+        "context_precision": 0.32499999998375,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_020",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8774047912303621,
+        "context_precision": 0.3333333333,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_021",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8878972321862649,
+        "context_precision": 0.249999999975,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_022",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.3333333333333333,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_023",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9151775670896748,
+        "context_precision": 0.4499999999775,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_024",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8391338185175008,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_025",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_026",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.5,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_027",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_028",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.869967935710667,
+        "context_precision": 0.49999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_029",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_030",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.7984249139921923,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_031",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_032",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_033",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_034",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_035",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.8971484018864252,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_036",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8688475469432747,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_037",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8884588435715434,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_038",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8141563569448841,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_039",
+        "category": "numeric_xbrl",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.857549521887447,
+        "context_precision": 0.7499999999625,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_000",
+        "category": "narrative",
+        "embedding_model": "openai",
+        "faithfulness": 0.7142857142857143,
+        "answer_relevancy": 0.9665293383094561,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_001",
+        "category": "narrative",
+        "embedding_model": "openai",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.8694510347172931,
+        "context_precision": 0.99999999995,
+        "context_recall": 0.0
+      },
+      {
+        "id": "narrative_002",
+        "category": "narrative",
+        "embedding_model": "openai",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.7324551566694081,
+        "context_precision": 0.8666666666377778,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_003",
+        "category": "narrative",
+        "embedding_model": "openai",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.8130562245620463,
+        "context_precision": 0.99999999998,
+        "context_recall": 0.6666666666666666
+      },
+      {
+        "id": "narrative_004",
+        "category": "narrative",
+        "embedding_model": "openai",
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_005",
+        "category": "narrative",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8727381782797844,
+        "context_precision": 0.999999999975,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_006",
+        "category": "narrative",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9024270944391376,
+        "context_precision": 0.3333333333,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_007",
+        "category": "narrative",
+        "embedding_model": "openai",
+        "faithfulness": 0.9166666666666666,
+        "answer_relevancy": 0.9112985042307282,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_008",
+        "category": "narrative",
+        "embedding_model": "openai",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.6791666666496875,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_009",
+        "category": "narrative",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9509179623201671,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0
+      },
+      {
+        "id": "cross_document_000",
+        "category": "cross_document",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9369216068042542,
+        "context_precision": 0.7499999999625,
+        "context_recall": 0.5
+      },
+      {
+        "id": "cross_document_001",
+        "category": "cross_document",
+        "embedding_model": "openai",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.3333333333333333
+      },
+      {
+        "id": "cross_document_002",
+        "category": "cross_document",
+        "embedding_model": "openai",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "cross_document_003",
+        "category": "cross_document",
+        "embedding_model": "openai",
+        "faithfulness": 0.6666666666666666,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.3333333333333333
+      },
+      {
+        "id": "cross_document_004",
+        "category": "cross_document",
+        "embedding_model": "openai",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.99999999995,
+        "context_recall": 0.3333333333333333
+      }
+    ],
+    "aggregate": {
+      "faithfulness": 0.8263636363636363,
+      "answer_relevancy": 0.43738286518976677,
+      "context_precision": 0.47007575754836034,
+      "context_recall": 0.5666666666666667
+    }
   },
   "refusal": {
     "count": 11,

@@ -5,11 +5,512 @@
   "num_unanswerable": 11,
   "pipeline_elapsed_s": 124.61045047600055,
   "ragas_elapsed_s": 0.0,
-  "ragas_pending": true,
+  "ragas_pending": false,
   "total_generation_cost_usd": 0.157784,
   "ragas": {
-    "per_question": [],
-    "aggregate": {}
+    "per_question": [
+      {
+        "id": "numeric_000",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_001",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.7927317073571153,
+        "context_precision": 0.249999999975,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_002",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_003",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.32499999998375,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_004",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.7631993061841801,
+        "context_precision": 0.699999999965,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_005",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8016188746338547,
+        "context_precision": 0.249999999975,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_006",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.7406559233786144,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_007",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_008",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8543868619442193,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_009",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8011155750251363,
+        "context_precision": 0.249999999975,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_010",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.6666666666666666,
+        "answer_relevancy": 0.8176028657393254,
+        "context_precision": 0.49999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_011",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.19999999998,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_012",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_013",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_014",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_015",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_016",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.6666666666666666,
+        "answer_relevancy": 0.8955078948471208,
+        "context_precision": 0.4499999999775,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_017",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8636461805013979,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_018",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8983982224831827,
+        "context_precision": 0.5333333333155555,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_019",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.249999999975,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_020",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8825235096846081,
+        "context_precision": 0.19999999998,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_021",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8812659177419633,
+        "context_precision": 0.32499999998375,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_022",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.6666666666666666,
+        "answer_relevancy": 0.8894988289633036,
+        "context_precision": 0.49999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_023",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8848219403190444,
+        "context_precision": 0.32499999998375,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_024",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_025",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.6,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_026",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_027",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_028",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8695205236878069,
+        "context_precision": 0.49999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_029",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.8849147162212091,
+        "context_precision": 0.19999999998,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_030",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.5,
+        "answer_relevancy": 0.7755076226962467,
+        "context_precision": 0.3333333333,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_031",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_032",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_033",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.25,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_034",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_035",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8591824260545516,
+        "context_precision": 0.49999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "numeric_036",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_037",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_038",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 0.3333333333333333,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "id": "numeric_039",
+        "category": "numeric_xbrl",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.824288896574996,
+        "context_precision": 0.249999999975,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_000",
+        "category": "narrative",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.966524618252151,
+        "context_precision": 0.8666666666377778,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_001",
+        "category": "narrative",
+        "embedding_model": "voyage",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.891535824558845,
+        "context_precision": 0.99999999995,
+        "context_recall": 0.0
+      },
+      {
+        "id": "narrative_002",
+        "category": "narrative",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8304780696209946,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_003",
+        "category": "narrative",
+        "embedding_model": "voyage",
+        "faithfulness": 0.8571428571428571,
+        "answer_relevancy": 0.6991105965094327,
+        "context_precision": 0.8874999999778125,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_004",
+        "category": "narrative",
+        "embedding_model": "voyage",
+        "faithfulness": 0.7142857142857143,
+        "answer_relevancy": 0.8575507470627568,
+        "context_precision": 0.9166666666361111,
+        "context_recall": 0.0
+      },
+      {
+        "id": "narrative_005",
+        "category": "narrative",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9110086334705773,
+        "context_precision": 0.9166666666361111,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_006",
+        "category": "narrative",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8949773320168924,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_007",
+        "category": "narrative",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.862231225464987,
+        "context_precision": 0.999999999975,
+        "context_recall": 1.0
+      },
+      {
+        "id": "narrative_008",
+        "category": "narrative",
+        "embedding_model": "voyage",
+        "faithfulness": 0.8571428571428571,
+        "answer_relevancy": 0.8987236987090387,
+        "context_precision": 0.94999999997625,
+        "context_recall": 0.5
+      },
+      {
+        "id": "narrative_009",
+        "category": "narrative",
+        "embedding_model": "voyage",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.9833322677549607,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0
+      },
+      {
+        "id": "cross_document_000",
+        "category": "cross_document",
+        "embedding_model": "voyage",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9274840211678792,
+        "context_precision": 0.49999999995,
+        "context_recall": 0.5
+      },
+      {
+        "id": "cross_document_001",
+        "category": "cross_document",
+        "embedding_model": "voyage",
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.3333333333333333
+      },
+      {
+        "id": "cross_document_002",
+        "category": "cross_document",
+        "embedding_model": "voyage",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.25
+      },
+      {
+        "id": "cross_document_003",
+        "category": "cross_document",
+        "embedding_model": "voyage",
+        "faithfulness": 0.6666666666666666,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.3333333333333333
+      },
+      {
+        "id": "cross_document_004",
+        "category": "cross_document",
+        "embedding_model": "voyage",
+        "faithfulness": 0.6,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.9166666666361111,
+        "context_recall": 0.3333333333333333
+      }
+    ],
+    "aggregate": {
+      "faithfulness": 0.8838528138528138,
+      "answer_relevancy": 0.4673335423386616,
+      "context_precision": 0.3599242424041723,
+      "context_recall": 0.5136363636363636
+    }
   },
   "refusal": {
     "count": 11,
