@@ -19,8 +19,9 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from airflow import DAG
 from airflow.operators.python import PythonOperator
+
+from airflow import DAG
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "src"))
@@ -80,7 +81,12 @@ def _persist_and_alert(embedding_model: str, **context) -> None:
     load_dotenv(REPO_ROOT / ".env")
 
     from rag_eval_harness.observability.regression import detect_regressions, format_alert
-    from rag_eval_harness.observability.storage import get_engine, get_recent_runs, init_db, load_run
+    from rag_eval_harness.observability.storage import (
+        get_engine,
+        get_recent_runs,
+        init_db,
+        load_run,
+    )
 
     ti = context["ti"]
     run_json_path = ti.xcom_pull(task_ids=f"run_evaluation_{embedding_model}")

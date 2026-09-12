@@ -96,10 +96,12 @@ def index_chunk_batch(
     openai_vecs = _with_retry(embed_openai, openai_client, texts, progress_log=progress_log)
 
     voyage_upserts = [
-        (c.chunk_id, vec, c.to_pinecone_metadata()) for c, vec in zip(batch, voyage_vecs)
+        (c.chunk_id, vec, c.to_pinecone_metadata())
+        for c, vec in zip(batch, voyage_vecs, strict=True)
     ]
     openai_upserts = [
-        (c.chunk_id, vec, c.to_pinecone_metadata()) for c, vec in zip(batch, openai_vecs)
+        (c.chunk_id, vec, c.to_pinecone_metadata())
+        for c, vec in zip(batch, openai_vecs, strict=True)
     ]
 
     for sub in _batched(voyage_upserts, _UPSERT_BATCH_SIZE):

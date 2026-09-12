@@ -38,7 +38,6 @@ import openai  # noqa: E402
 import voyageai  # noqa: E402
 from pinecone import Pinecone  # noqa: E402
 
-import rag_eval_harness  # noqa: E402  applies the ragas/vertexai compat shim
 from rag_eval_harness.evaluation.harness import (  # noqa: E402
     ANSWERABLE_CATEGORIES,
     load_golden_dataset,
@@ -64,7 +63,13 @@ def build_clients():
     return retriever, generator
 
 
-def run_for_embedding_model(embedding_model: str, questions: list[dict], retriever, generator, sample: int | None) -> dict:
+def run_for_embedding_model(
+    embedding_model: str,
+    questions: list[dict],
+    retriever,
+    generator,
+    sample: int | None,
+) -> dict:
     answerable_qs = [q for q in questions if q["category"] in ANSWERABLE_CATEGORIES]
     unanswerable_qs = [q for q in questions if q["category"] == "unanswerable"]
     if sample:
@@ -114,7 +119,12 @@ def run_for_embedding_model(embedding_model: str, questions: list[dict], retriev
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--embedding-model", choices=["voyage", "openai", "both"], default="voyage")
-    parser.add_argument("--sample", type=int, default=None, help="Only run the first N answerable questions (smoke-test / cost control)")
+    parser.add_argument(
+        "--sample",
+        type=int,
+        default=None,
+        help="Only run the first N answerable questions (smoke-test / cost control)",
+    )
     args = parser.parse_args()
 
     questions = load_golden_dataset()

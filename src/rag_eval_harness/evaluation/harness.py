@@ -19,8 +19,7 @@ questions don't have.
 from __future__ import annotations
 
 import json
-import time
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Literal
 
@@ -72,7 +71,13 @@ def load_golden_dataset() -> list[dict]:
 ANSWERABLE_CATEGORIES = {"numeric_xbrl", "narrative", "cross_document"}
 
 
-def run_pipeline(question: dict, retriever, generator, embedding_model: EmbeddingModelName, top_k: int = 5) -> QuestionResult:
+def run_pipeline(
+    question: dict,
+    retriever,
+    generator,
+    embedding_model: EmbeddingModelName,
+    top_k: int = 5,
+) -> QuestionResult:
     """Run one golden question through retrieval + generation exactly once."""
     retrieval = retriever.retrieve(question["question"], top_k=top_k, model=embedding_model)
     generation = generator.generate(question["question"], retrieval.chunks)

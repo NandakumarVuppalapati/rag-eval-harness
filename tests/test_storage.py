@@ -26,8 +26,20 @@ def _sample_run(embedding_model: str = "voyage", faithfulness: float = 0.9) -> d
                 "context_recall": 0.75,
             },
             "per_question": [
-                {"id": "numeric_000", "faithfulness": 1.0, "answer_relevancy": 0.9, "context_precision": 0.8, "context_recall": 0.85},
-                {"id": "numeric_001", "faithfulness": 0.8, "answer_relevancy": 0.7, "context_precision": 0.6, "context_recall": 0.65},
+                {
+                    "id": "numeric_000",
+                    "faithfulness": 1.0,
+                    "answer_relevancy": 0.9,
+                    "context_precision": 0.8,
+                    "context_recall": 0.85,
+                },
+                {
+                    "id": "numeric_001",
+                    "faithfulness": 0.8,
+                    "answer_relevancy": 0.7,
+                    "context_precision": 0.6,
+                    "context_recall": 0.65,
+                },
             ],
         },
         "refusal": {"refusal_rate": 1.0, "count": 1, "failures": []},

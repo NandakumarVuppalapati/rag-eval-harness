@@ -17,7 +17,7 @@ from rag_eval_harness.retrieval.retriever import RetrievalResult, RetrievedChunk
 
 
 @pytest.fixture
-def client():
+def client(mock_external_api_clients):
     fake_chunk = RetrievedChunk(
         chunk_id="AAPL_10K_2025-09-27_0100",
         score=0.64,

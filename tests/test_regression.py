@@ -1,15 +1,26 @@
-from rag_eval_harness.observability.regression import (
-    detect_regressions,
-    format_alert,
-)
+from rag_eval_harness.observability.regression import detect_regressions, format_alert
+
+
+def _scores(faithfulness=0.90, answer_relevancy=0.85, context_precision=0.80, context_recall=0.82, refusal_rate=1.0):
+    """Shorthand for a full metrics dict, so individual tests only spell out
+    the values they actually care about deviating from a healthy baseline."""
+    return {
+        "faithfulness": faithfulness,
+        "answer_relevancy": answer_relevancy,
+        "context_precision": context_precision,
+        "context_recall": context_recall,
+        "refusal_rate": refusal_rate,
+    }
 
 
 def test_no_regression_when_scores_stable():
-    current = {"faithfulness": 0.90, "answer_relevancy": 0.85, "context_precision": 0.80, "context_recall": 0.82, "refusal_rate": 1.0}
+    current = _scores()
     baseline = [
-        {"faithfulness": 0.91, "answer_relevancy": 0.84, "context_precision": 0.79, "context_recall": 0.81, "refusal_rate": 1.0},
-        {"faithfulness": 0.89, "answer_relevancy": 0.86, "context_precision": 0.81, "context_recall": 0.83, "refusal_rate": 0.9},
-        {"faithfulness": 0.90, "answer_relevancy": 0.85, "context_precision": 0.80, "context_recall": 0.82, "refusal_rate": 1.0},
+        _scores(faithfulness=0.91, answer_relevancy=0.84, context_precision=0.79, context_recall=0.81),
+        _scores(
+            faithfulness=0.89, answer_relevancy=0.86, context_precision=0.81, context_recall=0.83, refusal_rate=0.9
+        ),
+        _scores(),
     ]
     findings = detect_regressions(current, baseline)
     assert all(not f.is_regression for f in findings)
@@ -17,11 +28,8 @@ def test_no_regression_when_scores_stable():
 
 
 def test_clear_regression_is_flagged():
-    current = {"faithfulness": 0.50, "answer_relevancy": 0.85, "context_precision": 0.80, "context_recall": 0.82, "refusal_rate": 1.0}
-    baseline = [
-        {"faithfulness": 0.90, "answer_relevancy": 0.85, "context_precision": 0.80, "context_recall": 0.82, "refusal_rate": 1.0}
-        for _ in range(3)
-    ]
+    current = _scores(faithfulness=0.50)
+    baseline = [_scores() for _ in range(3)]
     findings = detect_regressions(current, baseline)
     faithfulness_finding = next(f for f in findings if f.metric == "faithfulness")
     assert faithfulness_finding.is_regression

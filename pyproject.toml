@@ -56,11 +56,19 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# These two scripts build the golden dataset from long, human-readable
+# question/answer templates and source-citation dicts -- wrapping them
+# to fit a line-length limit would make the actual question text harder
+# to read and review, which is the opposite of the point of E501 here.
+"scripts/build_golden_dataset.py" = ["E501"]
+"scripts/build_narrative_questions.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.10"

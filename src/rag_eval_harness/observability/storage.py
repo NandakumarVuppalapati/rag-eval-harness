@@ -9,7 +9,7 @@ docs/adr/0003-observability-storage.md for why.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime
 
 from sqlalchemy import (
     Boolean,
