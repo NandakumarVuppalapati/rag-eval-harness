@@ -1,0 +1,90 @@
+[
+  {
+    "id": "unanswerable_000",
+    "category": "unanswerable",
+    "reason": "out_of_scope_company",
+    "question": "What was Tesla's total revenue for fiscal year 2025?",
+    "reference_answer": "This cannot be answered from the provided context. The corpus covers 10-K/10-Q filings for AAPL, MSFT, WMT, TGT, JPM, GS, JNJ, PFE, CAT, and BA only; Tesla is not one of the companies in this corpus.",
+    "expected_behavior": "refuse"
+  },
+  {
+    "id": "unanswerable_001",
+    "category": "unanswerable",
+    "reason": "out_of_scope_company",
+    "question": "What was Amazon Web Services' segment operating income for fiscal year 2025?",
+    "reference_answer": "This cannot be answered from the provided context. Amazon is not one of the 10 companies covered by this corpus.",
+    "expected_behavior": "refuse"
+  },
+  {
+    "id": "unanswerable_002",
+    "category": "unanswerable",
+    "reason": "out_of_scope_period",
+    "question": "What was Apple's total net sales for fiscal year 2015?",
+    "reference_answer": "This cannot be answered from the provided context. The corpus's Apple filings only cover fiscal periods from mid-2025 through mid-2026 (one 10-K and four 10-Qs); fiscal year 2015 is well outside that window.",
+    "expected_behavior": "refuse"
+  },
+  {
+    "id": "unanswerable_003",
+    "category": "unanswerable",
+    "reason": "out_of_scope_period",
+    "question": "What was JPMorgan Chase's total revenue for fiscal year 2010?",
+    "reference_answer": "This cannot be answered from the provided context. The corpus's JPMorgan filings only cover fiscal periods from 2025 onward; fiscal year 2010 is not included.",
+    "expected_behavior": "refuse"
+  },
+  {
+    "id": "unanswerable_004",
+    "category": "unanswerable",
+    "reason": "hypothetical_future",
+    "question": "What is Pfizer's projected total revenue for fiscal year 2028?",
+    "reference_answer": "This cannot be answered from the provided context. 10-K and 10-Q filings report historical results, not forward-looking revenue projections for future fiscal years.",
+    "expected_behavior": "refuse"
+  },
+  {
+    "id": "unanswerable_005",
+    "category": "unanswerable",
+    "reason": "hypothetical_future",
+    "question": "What will Boeing's net income be in fiscal year 2027?",
+    "reference_answer": "This cannot be answered from the provided context. The corpus contains historical filings only, and none of them forecast a specific future fiscal year's net income.",
+    "expected_behavior": "refuse"
+  },
+  {
+    "id": "unanswerable_006",
+    "category": "unanswerable",
+    "reason": "out_of_scope_document_type",
+    "question": "What was the total compensation paid to JPMorgan Chase's CEO in fiscal year 2025?",
+    "reference_answer": "This cannot be answered from the provided context. Named-executive-officer compensation is disclosed in a company's annual proxy statement (DEF 14A), not in its 10-K or 10-Q filings, and this corpus contains only 10-Ks and 10-Qs.",
+    "expected_behavior": "refuse"
+  },
+  {
+    "id": "unanswerable_007",
+    "category": "unanswerable",
+    "reason": "divested_segment",
+    "question": "What was Johnson & Johnson's total revenue from its Consumer Health segment in fiscal year 2025?",
+    "reference_answer": "This cannot be answered from the provided context, and the premise is outdated: J&J completed the separation of its Consumer Health business (Kenvue) via an exchange offer on August 23, 2023. J&J's fiscal 2025 10-K reports only Innovative Medicine and MedTech as its reportable segments; there is no Consumer Health segment revenue to report for 2025.",
+    "expected_behavior": "refuse"
+  },
+  {
+    "id": "unanswerable_008",
+    "category": "unanswerable",
+    "reason": "undisclosed_metric",
+    "question": "What is Caterpillar's market share in the global construction equipment industry?",
+    "reference_answer": "This cannot be answered from the provided context. Caterpillar's 10-Q discusses competitive conditions qualitatively but does not disclose a specific market-share percentage.",
+    "expected_behavior": "refuse"
+  },
+  {
+    "id": "unanswerable_009",
+    "category": "unanswerable",
+    "reason": "undisclosed_granularity",
+    "question": "How many of Goldman Sachs' employees are based in India, as of fiscal year 2025?",
+    "reference_answer": "This cannot be answered from the provided context. Goldman Sachs' 10-K does not break down its workforce by country.",
+    "expected_behavior": "refuse"
+  },
+  {
+    "id": "unanswerable_010",
+    "category": "unanswerable",
+    "reason": "out_of_scope_company",
+    "question": "According to these filings, what was Target's store count in Canada as of fiscal year 2025?",
+    "reference_answer": "This cannot be answered from the provided context. Target exited the Canadian market in 2015 and its current filings do not discuss Canadian store operations; there is no fiscal 2025 Canada store count to report.",
+    "expected_behavior": "refuse"
+  }
+]

@@ -1,0 +1,302 @@
+[
+  {
+    "id": "narrative_000",
+    "category": "narrative",
+    "question": "According to Boeing's 2025 10-K, what was the total fair value of consideration for its acquisition of Spirit AeroSystems?",
+    "reference_answer": "$8,371 million, comprised of Boeing common stock exchanged for Spirit common stock ($4,704M), settlement of loans/advances/other payments to Spirit ($2,571M), debt repaid on Spirit's behalf ($948M), premium on assumed Spirit Exchangeable Notes ($109M), and exchange of Spirit share-based awards ($39M).",
+    "ticker": "BA",
+    "company_name": "BOEING CO",
+    "expected_form": "10-K",
+    "expected_report_date": "2025-12-31",
+    "expected_source_url": "https://www.sec.gov/Archives/edgar/data/12927/000162828026004357/ba-20251231.htm",
+    "verified_substrings": [
+      "8,371",
+      "4,704",
+      "Spirit"
+    ],
+    "verified": true,
+    "missing_substrings": []
+  },
+  {
+    "id": "narrative_001",
+    "category": "narrative",
+    "question": "Per Boeing's Q3 2025 10-Q, what termination fee would Boeing owe Spirit AeroSystems if the Spirit merger agreement were terminated under the specified regulatory-approval circumstances?",
+    "reference_answer": "$300 million.",
+    "ticker": "BA",
+    "company_name": "BOEING CO",
+    "expected_form": "10-Q",
+    "expected_report_date": "2025-09-30",
+    "expected_source_url": "https://www.sec.gov/Archives/edgar/data/12927/000162828025047023/ba-20250930.htm",
+    "verified_substrings": [
+      "termination fee",
+      "300"
+    ],
+    "verified": true,
+    "missing_substrings": []
+  },
+  {
+    "id": "narrative_002",
+    "category": "narrative",
+    "question": "According to Johnson & Johnson's 2025 10-K, what happened on August 23, 2023 in the Kenvue separation, and how many J&J shares did the company receive?",
+    "reference_answer": "On August 23, 2023, J&J completed the disposition of an additional 80.1% ownership of Kenvue common stock through an exchange offer, receiving 190,955,436 shares of its own common stock in exchange for 1,533,830,450 shares of Kenvue common stock. The $31.4 billion of J&J common stock received was recorded in treasury stock, and following the offer J&J retained a 9.5% equity stake in Kenvue.",
+    "ticker": "JNJ",
+    "company_name": "JOHNSON & JOHNSON",
+    "expected_form": "10-K",
+    "expected_report_date": "2025-12-28",
+    "expected_source_url": "https://www.sec.gov/Archives/edgar/data/200406/000020040626000016/jnj-20251228.htm",
+    "verified_substrings": [
+      "August 23, 2023",
+      "190,955,436",
+      "31.4 billion",
+      "9.5"
+    ],
+    "verified": true,
+    "missing_substrings": []
+  },
+  {
+    "id": "narrative_003",
+    "category": "narrative",
+    "question": "Per Pfizer's 2025 10-K product-revenue discussion, how did worldwide Comirnaty revenue change in 2025 versus 2024, and what drove the change?",
+    "reference_answer": "Worldwide Comirnaty revenue was $4,367 million in 2025 versus $5,353 million in 2024, down 20% operationally (18% as reported). The decline was driven by lower contractual deliveries and lower vaccination rates in certain international markets, and lower U.S. utilization following a narrower vaccination recommendation, partially offset by lower returns and higher U.S. market share.",
+    "ticker": "PFE",
+    "company_name": "PFIZER INC",
+    "expected_form": "10-K",
+    "expected_report_date": "2025-12-31",
+    "expected_source_url": "https://www.sec.gov/Archives/edgar/data/78003/000007800326000026/pfe-20251231.htm",
+    "verified_substrings": [
+      "Comirnaty",
+      "4,367",
+      "5,353",
+      "20"
+    ],
+    "verified": true,
+    "missing_substrings": []
+  },
+  {
+    "id": "narrative_004",
+    "category": "narrative",
+    "question": "What are Caterpillar's reportable operating segments, per its Q3 2025 10-Q?",
+    "reference_answer": "Construction Industries, Resource Industries, Energy & Transportation, and Financial Products.",
+    "ticker": "CAT",
+    "company_name": "CATERPILLAR INC",
+    "expected_form": "10-Q",
+    "expected_report_date": "2025-09-30",
+    "expected_source_url": "https://www.sec.gov/Archives/edgar/data/18230/000001823025000048/cat-20250930.htm",
+    "verified_substrings": [
+      "Construction Industries",
+      "Resource Industries",
+      "Energy & Transportation",
+      "Financial Products"
+    ],
+    "verified": true,
+    "missing_substrings": []
+  },
+  {
+    "id": "narrative_005",
+    "category": "narrative",
+    "question": "Per Apple's fiscal 2025 10-K, what drove the increase in Services net sales, and what was total Services net sales for fiscal 2025?",
+    "reference_answer": "Services net sales were $109,158 million in fiscal 2025, up 14% year over year, driven primarily by higher net sales from advertising, the App Store, and cloud services.",
+    "ticker": "AAPL",
+    "company_name": "Apple Inc.",
+    "expected_form": "10-K",
+    "expected_report_date": "2025-09-27",
+    "expected_source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm",
+    "verified_substrings": [
+      "109,158",
+      "advertising, the App Store and cloud services"
+    ],
+    "verified": true,
+    "missing_substrings": []
+  },
+  {
+    "id": "narrative_006",
+    "category": "narrative",
+    "question": "According to Apple's fiscal 2025 10-K, what was Products gross margin in dollars for fiscal years 2025, 2024, and 2023?",
+    "reference_answer": "$112,887 million (2025), $109,633 million (2024), and $108,803 million (2023).",
+    "ticker": "AAPL",
+    "company_name": "Apple Inc.",
+    "expected_form": "10-K",
+    "expected_report_date": "2025-09-27",
+    "expected_source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm",
+    "verified_substrings": [
+      "112,887",
+      "109,633",
+      "108,803"
+    ],
+    "verified": true,
+    "missing_substrings": []
+  },
+  {
+    "id": "narrative_007",
+    "category": "narrative",
+    "question": "Per Microsoft's fiscal 2026 10-K, what does the Intelligent Cloud segment's \"server products and cloud services\" line primarily comprise?",
+    "reference_answer": "Azure and other cloud services (cloud and AI consumption-based services), GitHub cloud services, Health and Life Sciences cloud services (formerly Nuance Healthcare cloud services), virtual desktop offerings, and other cloud services, as well as server products such as SQL Server and Windows Server.",
+    "ticker": "MSFT",
+    "company_name": "MICROSOFT CORP",
+    "expected_form": "10-K",
+    "expected_report_date": "2026-06-30",
+    "expected_source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/msft-20260630.htm",
+    "verified_substrings": [
+      "Azure and other cloud services",
+      "GitHub cloud services",
+      "Health and Life Sciences cloud services"
+    ],
+    "verified": true,
+    "missing_substrings": []
+  },
+  {
+    "id": "narrative_008",
+    "category": "narrative",
+    "question": "Per Walmart's Q2 fiscal 2026 10-Q (quarter ended July 31, 2025), what was Walmart International's net sales by market?",
+    "reference_answer": "For the three months ended July 31, 2025: Mexico and Central America $12,546M, China $5,786M, Canada $6,114M, Other $6,755M, for a total of $31,201M (versus $29,567M in the prior-year quarter).",
+    "ticker": "WMT",
+    "company_name": "Walmart Inc.",
+    "expected_form": "10-Q",
+    "expected_report_date": "2025-07-31",
+    "expected_source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416925000137/wmt-20250731.htm",
+    "verified_substrings": [
+      "12,546",
+      "5,786",
+      "6,114",
+      "31,201"
+    ],
+    "verified": true,
+    "missing_substrings": []
+  },
+  {
+    "id": "narrative_009",
+    "category": "narrative",
+    "question": "How does Target's Q3 fiscal 2025 10-Q define \"comparable sales\"?",
+    "reference_answer": "Comparable sales include all Merchandise Sales, except sales from stores open less than 13 months or that have been closed, and are used to measure the change in sales for a period over the comparable, prior-year period of equivalent length. Target notes that comparable sales measures vary across the retail industry.",
+    "ticker": "TGT",
+    "company_name": "TARGET CORP",
+    "expected_form": "10-Q",
+    "expected_report_date": "2025-11-01",
+    "expected_source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741925000126/tgt-20251101.htm",
+    "verified_substrings": [
+      "Comparable sales include all Merchandise Sales",
+      "13 months"
+    ],
+    "verified": true,
+    "missing_substrings": []
+  },
+  {
+    "id": "cross_document_000",
+    "category": "cross_document",
+    "question": "How did Walmart International's total quarterly net sales change between the quarter ended July 31, 2025 and the quarter ended October 31, 2025?",
+    "reference_answer": "Walmart International net sales rose from $31,201 million (Q2 FY2026, quarter ended July 31, 2025) to $33,541 million (Q3 FY2026, quarter ended October 31, 2025), an increase of $2,340 million (about 7.5%).",
+    "ticker": [
+      "WMT"
+    ],
+    "sources": [
+      {
+        "form": "10-Q",
+        "report_date": "2025-07-31",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416925000137/wmt-20250731.htm"
+      },
+      {
+        "form": "10-Q",
+        "report_date": "2025-10-31",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416925000191/wmt-20251031.htm"
+      }
+    ],
+    "verified": true
+  },
+  {
+    "id": "cross_document_001",
+    "category": "cross_document",
+    "question": "Comparing their fiscal year 2025 10-Ks, which reported higher net income: JPMorgan Chase or Goldman Sachs, and by how much?",
+    "reference_answer": "JPMorgan Chase reported net income of $57,048 million for FY2025 (period ended 2025-12-31), versus Goldman Sachs' $17,176 million for the same period -- JPMorgan's net income was $39,872,000,000 higher.",
+    "ticker": [
+      "JPM",
+      "GS"
+    ],
+    "sources": [
+      {
+        "ticker": "JPM",
+        "form": "10-K",
+        "report_date": "2025-12-31",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/19617/000162828026008131/jpm-20251231.htm"
+      },
+      {
+        "ticker": "GS",
+        "form": "10-K",
+        "report_date": "2025-12-31",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/886982/000088698226000091/gs-20251231.htm"
+      }
+    ],
+    "verified": true
+  },
+  {
+    "id": "cross_document_002",
+    "category": "cross_document",
+    "question": "Comparing Pfizer's and Johnson & Johnson's most recent fiscal-2025 10-Ks, which company reported higher total revenue, and by how much?",
+    "reference_answer": "Johnson & Johnson reported total revenue of $94,193 million for its fiscal year ended 2025-12-28, versus Pfizer's $62,579 million for its fiscal year ended 2025-12-31 -- J&J's revenue was $31,614,000,000 higher, though note the two companies' fiscal years end three days apart.",
+    "ticker": [
+      "JNJ",
+      "PFE"
+    ],
+    "sources": [
+      {
+        "ticker": "JNJ",
+        "form": "10-K",
+        "report_date": "2025-12-28",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/200406/000020040626000016/jnj-20251228.htm"
+      },
+      {
+        "ticker": "PFE",
+        "form": "10-K",
+        "report_date": "2025-12-31",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/78003/000007800326000026/pfe-20251231.htm"
+      }
+    ],
+    "verified": true
+  },
+  {
+    "id": "cross_document_003",
+    "category": "cross_document",
+    "question": "Comparing Walmart's and Target's fiscal 2026 10-Ks (both fiscal years ended January 31, 2026), which company reported higher total revenue, and by how much?",
+    "reference_answer": "Walmart reported total revenue of $713,163 million for the fiscal year ended 2026-01-31, versus Target's $104,780 million for the same fiscal year-end -- Walmart's revenue was $608,383,000,000 higher.",
+    "ticker": [
+      "WMT",
+      "TGT"
+    ],
+    "sources": [
+      {
+        "ticker": "WMT",
+        "form": "10-K",
+        "report_date": "2026-01-31",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/104169/000010416926000055/wmt-20260131.htm"
+      },
+      {
+        "ticker": "TGT",
+        "form": "10-K",
+        "report_date": "2026-01-31",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741926000016/tgt-20260131.htm"
+      }
+    ],
+    "verified": true
+  },
+  {
+    "id": "cross_document_004",
+    "category": "cross_document",
+    "question": "Apple's Q3 FY2025 10-Q (period ended 2025-06-28) and its FY2025 10-K (period ended 2025-09-27) each report a cumulative net income figure. What are those two figures, and what does their difference approximate?",
+    "reference_answer": "The Q3 FY2025 10-Q reports cumulative net income of $84,544 million (nine months ended 2025-06-28); the FY2025 10-K reports $112,010 million (full fiscal year ended 2025-09-27). The difference, $27,466,000,000, approximates Apple's Q4 FY2025 net income.",
+    "ticker": [
+      "AAPL"
+    ],
+    "sources": [
+      {
+        "form": "10-Q",
+        "report_date": "2025-06-28",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000073/aapl-20250628.htm"
+      },
+      {
+        "form": "10-K",
+        "report_date": "2025-09-27",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm"
+      }
+    ],
+    "verified": true
+  }
+]
