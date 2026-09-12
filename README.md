@@ -1,5 +1,7 @@
 # RAG Evaluation & Observability Harness
 
+[![CI](https://github.com/NandakumarVuppalapati/rag-eval-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/NandakumarVuppalapati/rag-eval-harness/actions/workflows/ci.yml)
+
 Production RAG systems rarely have a good answer to the question *"how do you know when it's wrong?"* Retrieval can quietly start missing the right passages. Generation can hallucinate fluently, without throwing a single error. Neither shows up in a normal API status code.
 
 This project is a harness that continuously interrogates a real RAG system — instead of just running it — to answer that question with evidence instead of guesswork.
