@@ -48,3 +48,13 @@ assumption in its README.
 - If the ablation shows no meaningful difference between the two
   models on this corpus, that is itself a useful, reportable result --
   the point of measuring is being willing to find either answer.
+
+## Update: first real measurement
+
+The first full pipeline run (see `data/eval_results/examples/README.md`)
+shows a real, meaningful difference: `voyage-finance-2` left 21/55
+answerable questions unretrieved-enough-to-refuse, versus 25/55 for
+`text-embedding-3-small` -- the domain-tuned model retrieves better, as
+hypothesized, though neither is close to reliable yet. That gap (and how
+large it still is) is the kind of number this ADR's decision was written
+to be able to produce.
