@@ -14,8 +14,9 @@ import openai
 import structlog
 import voyageai
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from pinecone import Pinecone
+from prometheus_client import CONTENT_TYPE_LATEST, REGISTRY, Counter, Histogram, generate_latest
 
 from rag_eval_harness.api.schemas import (
     HealthResponse,
@@ -50,6 +51,26 @@ app = FastAPI(
     description="Retrieval + generation service over a real SEC-filing corpus.",
     version="0.1.0",
     lifespan=lifespan,
+)
+
+# --- Prometheus metrics -----------------------------------------------
+# Live request-level metrics (always available). Eval-quality gauges are
+# added at scrape time in /metrics, read from Postgres when DATABASE_URL is
+# set -- there's deliberately no in-process eval state, since the nightly
+# Airflow DAG runs in a separate process from this API service.
+QUERY_REQUESTS = Counter(
+    "rag_eval_harness_query_requests_total",
+    "Total /query requests served",
+    ["refused"],
+)
+QUERY_LATENCY_SECONDS = Histogram(
+    "rag_eval_harness_query_latency_seconds",
+    "End-to-end /query latency in seconds",
+)
+QUERY_COST_USD = Histogram(
+    "rag_eval_harness_query_cost_usd",
+    "Estimated cost per /query call in USD",
+    buckets=(0.0005, 0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1),
 )
 
 
@@ -105,6 +126,9 @@ def query(req: QueryRequest) -> QueryResponse:
         cost_usd=round(total_cost, 6),
         latency_ms=round(total_latency_ms, 1),
     )
+    QUERY_REQUESTS.labels(refused=str(generation.refused)).inc()
+    QUERY_LATENCY_SECONDS.observe(total_latency_ms / 1000)
+    QUERY_COST_USD.observe(total_cost)
 
     return QueryResponse(
         question=req.question,
@@ -133,3 +157,44 @@ def query(req: QueryRequest) -> QueryResponse:
         generation_output_tokens=generation.output_tokens,
         estimated_cost_usd=total_cost,
     )
+
+
+@app.get("/metrics")
+def metrics() -> Response:
+    """Prometheus scrape endpoint. Always exposes live request metrics;
+    additionally exposes the most recent nightly-eval scores per
+    embedding model when DATABASE_URL points at a reachable Postgres
+    instance (set by docker-compose in production). Missing/unreachable
+    DB is not an error here -- it just means the eval gauges are absent
+    from this scrape, which is the correct behavior for a service that
+    can run standalone without the observability stack.
+    """
+    payload = [generate_latest(REGISTRY)]
+    database_url = os.environ.get("DATABASE_URL")
+    if database_url:
+        try:
+            from rag_eval_harness.observability.storage import get_engine, get_latest_run
+
+            engine = get_engine(database_url)
+            lines = []
+            for embedding_model in ("voyage", "openai"):
+                run = get_latest_run(engine, embedding_model)
+                if not run:
+                    continue
+                for metric in (
+                    "faithfulness",
+                    "answer_relevancy",
+                    "context_precision",
+                    "context_recall",
+                    "refusal_rate",
+                ):
+                    value = run.get(metric)
+                    if value is not None:
+                        lines.append(
+                            f'rag_eval_harness_last_eval_{metric}{{embedding_model="{embedding_model}"}} {value}'
+                        )
+            if lines:
+                payload.append(("\n".join(lines) + "\n").encode())
+        except Exception as exc:  # noqa: BLE001
+            log.warning("metrics_eval_lookup_failed", error=str(exc))
+    return Response(content=b"".join(payload), media_type=CONTENT_TYPE_LATEST)

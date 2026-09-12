@@ -83,3 +83,11 @@ def test_query_404_when_no_chunks_retrieved(client):
     )
     resp = client.post("/query", json={"question": "anything"})
     assert resp.status_code == 404
+
+
+def test_metrics_endpoint_exposes_query_counters(client):
+    client.post("/query", json={"question": "What were Apple's net sales?"})
+    resp = client.get("/metrics")
+    assert resp.status_code == 200
+    assert "rag_eval_harness_query_requests_total" in resp.text
+    assert 'rag_eval_harness_query_requests_total{refused="False"}' in resp.text
