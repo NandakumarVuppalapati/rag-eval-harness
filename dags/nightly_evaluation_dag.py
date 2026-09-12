@@ -33,9 +33,8 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from airflow.operators.python import PythonOperator
-
 from airflow import DAG
+from airflow.operators.python import PythonOperator
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "src"))
