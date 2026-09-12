@@ -2,13 +2,27 @@
 
 Runs the golden dataset through the RAG pipeline for both embedding
 models (voyage-finance-2 and the text-embedding-3-small baseline),
-persists the results, and alerts on regressions against each model's
-own rolling history.
+scores it with Ragas, persists the results, and alerts on regressions
+against each model's own rolling history.
+
+Each embedding model is an independent branch of three tasks:
+
+    run_evaluation -> score_ragas -> persist_and_alert
+
+Retrieval + generation (run_evaluation) is split from Ragas scoring
+(score_ragas) on purpose. They depend on different providers with
+different failure modes -- generation is real Claude Haiku calls against
+this project's own corpus, so it isn't cheap or instant to redo; the Ragas
+judge is a second, independent OpenAI dependency that can be transiently
+rate-limited or down on its own schedule. Coupling them means a judge-side
+outage forces a full pipeline re-run just to get scored again. Splitting
+them means default_args["retries"] only re-does whichever half actually
+failed -- see scripts/run_evaluation.py's --skip-ragas and
+scripts/score_ragas.py, which this DAG's two tasks are thin wrappers
+around.
 
 The two embedding models run as independent branches so a Voyage outage
-doesn't block the OpenAI-baseline run (or vice versa); each branch's
-"score" task only proceeds to "persist_and_alert" if its own "run"
-task succeeded.
+doesn't block the OpenAI-baseline run (or vice versa).
 """
 
 from __future__ import annotations
@@ -37,10 +51,10 @@ default_args = {
 
 
 def _run_evaluation(embedding_model: str, **context) -> str:
-    """Run the full golden dataset through retrieval + generation + Ragas
-    for one embedding model, write the result JSON, and return its path
-    (passed to the next task via XCom -- the run dict itself is too large
-    and text-heavy to push through XCom directly)."""
+    """Run the full golden dataset through retrieval + generation (no
+    Ragas scoring) for one embedding model, write the result JSON, and
+    return its path (passed to the next task via XCom -- the run dict
+    itself is too large and text-heavy to push through XCom directly)."""
     os.environ.setdefault("PYTHONUNBUFFERED", "1")
     from dotenv import load_dotenv
 
@@ -58,13 +72,18 @@ def _run_evaluation(embedding_model: str, **context) -> str:
 
     pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
     voyage_client = voyageai.Client(api_key=os.environ["VOYAGE_API_KEY"])
+    # The OpenAI embedding model (the baseline branch) still needs an
+    # OpenAI client for embeddings here -- that's a different, unaffected
+    # rate-limit bucket from the gpt-4o-mini judge scored in _score_ragas.
     openai_client = openai.OpenAI(api_key=os.environ["OPENAI_API_KEY"])
     anthropic_client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     retriever = Retriever(pc, voyage_client, openai_client)
     generator = Generator(anthropic_client)
 
     questions = load_golden_dataset()
-    run = run_for_embedding_model(embedding_model, questions, retriever, generator, sample=None)
+    run = run_for_embedding_model(
+        embedding_model, questions, retriever, generator, sample=None, score_with_ragas=False
+    )
 
     EVAL_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     run_timestamp = context["ts_nodash"]
@@ -73,8 +92,41 @@ def _run_evaluation(embedding_model: str, **context) -> str:
     return str(out_path)
 
 
+def _score_ragas(embedding_model: str, **context) -> str:
+    """Score the run this branch's _run_evaluation task produced with
+    Ragas (the cross-family OpenAI judge), updating the same JSON file in
+    place. Retrying just this task never re-runs retrieval or generation."""
+    from dotenv import load_dotenv
+
+    load_dotenv(REPO_ROOT / ".env")
+
+    from rag_eval_harness.evaluation.harness import (
+        ANSWERABLE_CATEGORIES,
+        make_judge,
+        question_results_from_jsonable,
+        score_answerable,
+        score_refusal,
+    )
+
+    ti = context["ti"]
+    run_json_path = Path(ti.xcom_pull(task_ids=f"run_evaluation_{embedding_model}"))
+    run = json.loads(run_json_path.read_text())
+
+    all_results = question_results_from_jsonable(run["raw_results"])
+    answerable_results = [r for r in all_results if r.category in ANSWERABLE_CATEGORIES]
+    unanswerable_results = [r for r in all_results if r.category == "unanswerable"]
+
+    llm, embeddings = make_judge()
+    run["ragas"] = score_answerable(answerable_results, llm, embeddings)
+    run["refusal"] = score_refusal(unanswerable_results)
+    run["ragas_pending"] = False
+
+    run_json_path.write_text(json.dumps(run, indent=2))
+    return str(run_json_path)
+
+
 def _persist_and_alert(embedding_model: str, **context) -> None:
-    """Load the run this branch just produced into Postgres and check it
+    """Load the run this branch just scored into Postgres and check it
     against that embedding model's own recent history."""
     from dotenv import load_dotenv
 
@@ -89,7 +141,7 @@ def _persist_and_alert(embedding_model: str, **context) -> None:
     )
 
     ti = context["ti"]
-    run_json_path = ti.xcom_pull(task_ids=f"run_evaluation_{embedding_model}")
+    run_json_path = ti.xcom_pull(task_ids=f"score_ragas_{embedding_model}")
     run = json.loads(Path(run_json_path).read_text())
 
     database_url = os.environ.get("DATABASE_URL", f"sqlite:///{REPO_ROOT}/data/eval_results/eval_results.db")
@@ -125,9 +177,14 @@ with DAG(
             python_callable=_run_evaluation,
             op_kwargs={"embedding_model": embedding_model},
         )
+        score_task = PythonOperator(
+            task_id=f"score_ragas_{embedding_model}",
+            python_callable=_score_ragas,
+            op_kwargs={"embedding_model": embedding_model},
+        )
         persist_task = PythonOperator(
             task_id=f"persist_and_alert_{embedding_model}",
             python_callable=_persist_and_alert,
             op_kwargs={"embedding_model": embedding_model},
         )
-        run_task >> persist_task
+        run_task >> score_task >> persist_task

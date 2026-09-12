@@ -7,10 +7,21 @@ precision, context recall) using a cross-family OpenAI judge, and scores the
 unanswerable slice as a refusal rate. Results are written to
 data/eval_results/<timestamp>_<embedding_model>.json.
 
+Retrieval + generation (Pinecone/Voyage/Claude) and Ragas scoring (the
+OpenAI judge) are deliberately separable via --skip-ragas: they hit
+different providers with different rate-limit behavior, and the pipeline
+run is the expensive, non-idempotent half (real Claude generations). A
+transient judge-provider outage shouldn't cost a re-run of the pipeline
+just to get scored -- run with --skip-ragas, then backfill scores later
+with scripts/score_ragas.py once the judge is reachable again. This is
+also how dags/nightly_evaluation_dag.py splits the two into separate
+Airflow tasks, so a retry only re-does the half that actually failed.
+
 Usage:
     python scripts/run_evaluation.py --embedding-model voyage
     python scripts/run_evaluation.py --embedding-model both
     python scripts/run_evaluation.py --embedding-model voyage --sample 5
+    python scripts/run_evaluation.py --embedding-model voyage --skip-ragas
 """
 
 from __future__ import annotations
@@ -69,6 +80,7 @@ def run_for_embedding_model(
     retriever,
     generator,
     sample: int | None,
+    score_with_ragas: bool = True,
 ) -> dict:
     answerable_qs = [q for q in questions if q["category"] in ANSWERABLE_CATEGORIES]
     unanswerable_qs = [q for q in questions if q["category"] == "unanswerable"]
@@ -92,11 +104,17 @@ def run_for_embedding_model(
     answerable_results = [r for r in all_results if r.category in ANSWERABLE_CATEGORIES]
     unanswerable_results = [r for r in all_results if r.category == "unanswerable"]
 
-    print(f"Pipeline run complete in {pipeline_elapsed:.1f}s. Scoring with Ragas (cross-family OpenAI judge)...")
-    llm, embeddings = make_judge()
-    t1 = time.monotonic()
-    ragas_scores = score_answerable(answerable_results, llm, embeddings)
-    ragas_elapsed = time.monotonic() - t1
+    if score_with_ragas:
+        print(f"Pipeline run complete in {pipeline_elapsed:.1f}s. Scoring with Ragas (cross-family OpenAI judge)...")
+        llm, embeddings = make_judge()
+        t1 = time.monotonic()
+        ragas_scores = score_answerable(answerable_results, llm, embeddings)
+        ragas_elapsed = time.monotonic() - t1
+    else:
+        print(f"Pipeline run complete in {pipeline_elapsed:.1f}s. Skipping Ragas scoring (--skip-ragas); "
+              "run scripts/score_ragas.py on the output file to backfill it later.")
+        ragas_scores = {"per_question": [], "aggregate": {}}
+        ragas_elapsed = 0.0
 
     refusal_scores = score_refusal(unanswerable_results)
 
@@ -109,6 +127,7 @@ def run_for_embedding_model(
         "num_unanswerable": len(unanswerable_results),
         "pipeline_elapsed_s": pipeline_elapsed,
         "ragas_elapsed_s": ragas_elapsed,
+        "ragas_pending": not score_with_ragas,
         "total_generation_cost_usd": total_generation_cost,
         "ragas": ragas_scores,
         "refusal": refusal_scores,
@@ -125,6 +144,11 @@ def main() -> None:
         default=None,
         help="Only run the first N answerable questions (smoke-test / cost control)",
     )
+    parser.add_argument(
+        "--skip-ragas",
+        action="store_true",
+        help="Run retrieval + generation but skip Ragas scoring (see module docstring)",
+    )
     args = parser.parse_args()
 
     questions = load_golden_dataset()
@@ -136,13 +160,18 @@ def main() -> None:
     run_timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
     for model in models:
-        run = run_for_embedding_model(model, questions, retriever, generator, args.sample)
+        run = run_for_embedding_model(
+            model, questions, retriever, generator, args.sample, score_with_ragas=not args.skip_ragas
+        )
         out_path = EVAL_RESULTS_DIR / f"{run_timestamp}_{model}.json"
         out_path.write_text(json.dumps(run, indent=2))
 
         agg = run["ragas"]["aggregate"]
         print(f"\n--- {model} summary ---")
-        print(f"  Ragas aggregate: {agg}")
+        if run["ragas_pending"]:
+            print("  Ragas scoring skipped (--skip-ragas) -- run scripts/score_ragas.py on this file later")
+        else:
+            print(f"  Ragas aggregate: {agg}")
         print(f"  Refusal rate on unanswerable set: {run['refusal']['refusal_rate']}")
         print(f"  Total generation cost: ${run['total_generation_cost_usd']:.4f}")
         print(f"  Written to {out_path}")

@@ -27,3 +27,12 @@ data/raw_meta/company_tickers.json
 data/raw/
 data/index_cache/
 data/raw_meta/index_progress.json
+
+# Routine nightly-evaluation outputs belong in Postgres (via
+# observability/storage.py), not git -- they'd otherwise accumulate
+# unboundedly and unreviewably. data/eval_results/examples/ is the
+# exception: a couple of real runs kept deliberately as evidence, not
+# regenerated on each run, so they're tracked explicitly below.
+data/eval_results/*.json
+data/eval_results/*.db
+!data/eval_results/examples/*.json

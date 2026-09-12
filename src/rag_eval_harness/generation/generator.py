@@ -6,6 +6,16 @@ refusal behavior is itself one of the things the golden dataset tests
 (see the unanswerable-question category) -- a model that quietly
 hallucinates a plausible number when the context doesn't contain one is
 exactly the failure mode this whole project exists to catch.
+
+Refusal detection matches a *prefix*, not the whole answer, on purpose:
+the system prompt asks for the refusal sentence "and nothing else", but
+Claude Haiku routinely ignores that and appends a helpful explanation of
+*why* it's refusing (e.g. which company the excerpts are actually about).
+An earlier version of this checked for an exact match, which meant every
+one of those entirely-correct refusals was scored as a hallucination
+instead, because the extra sentence broke the equality check. Caught by
+running the real golden dataset through this and noticing a 0% refusal
+rate that didn't match what the answers actually said.
 """
 
 from __future__ import annotations
@@ -90,5 +100,5 @@ class Generator:
             output_tokens=output_tokens,
             latency_ms=latency_ms,
             cost_usd=cost,
-            refused=(answer.strip() == REFUSAL_TEXT),
+            refused=answer.strip().startswith(REFUSAL_TEXT),
         )

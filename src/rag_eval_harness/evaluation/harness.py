@@ -179,3 +179,12 @@ def score_refusal(results: list[QuestionResult]) -> dict:
 
 def results_to_jsonable(results: list[QuestionResult]) -> list[dict]:
     return [asdict(r) for r in results]
+
+
+def question_results_from_jsonable(raw_results: list[dict]) -> list[QuestionResult]:
+    """Inverse of results_to_jsonable. Used by scripts/score_ragas.py to
+    re-score a run that was persisted with --skip-ragas (see that flag's
+    docstring in scripts/run_evaluation.py for why that split exists)
+    without re-running retrieval or generation.
+    """
+    return [QuestionResult(**d) for d in raw_results]
