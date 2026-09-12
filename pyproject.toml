@@ -12,6 +12,7 @@ dependencies = [
     "langchain-community>=0.3",
     "langchain-anthropic>=0.3",
     "langchain-voyageai>=0.1",
+    "langchain-openai>=0.2",
     "langchain-text-splitters>=0.3",
     "openai>=1.50",
     "anthropic>=0.40",
