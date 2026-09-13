@@ -90,7 +90,7 @@ All from the real, running local stack (not staged/mocked) — a live triggered 
 
 ![Grafana dashboard showing real Ragas scores per embedding model, plus live request rate, latency, and cost panels](docs/screenshots/grafana-dashboard.png)
 
-Per-model Ragas scores (openai vs. voyage): faithfulness 82.2% / 87.0%, answer relevancy 42.6% / 46.3%, context precision 58.3% / 46.1%, context recall 59.4% / 49.3%, refusal rate on unanswerable questions 100% / 100%. The "Live API traffic" row scrapes the FastAPI service's own `/metrics` endpoint every 15s via Prometheus — it's flat here only because no query traffic was sent to the API in this particular 7-day window, not because the panels are fake.
+Per-model Ragas scores (openai vs. voyage): faithfulness 82.2% / 87.0%, answer relevancy 42.6% / 46.3%, context precision 58.3% / 46.1%, context recall 59.4% / 49.3%, refusal rate on unanswerable questions 100% / 100%. The "Live API traffic" row scrapes the FastAPI service's own `/metrics` endpoint every 15s via Prometheus; the visible spike is 7 real `/query` requests (a mix of numeric and narrative golden-dataset questions, split across both embedding models, one deliberately unanswerable one included) sent directly at the running API to prove the panels aren't just wired up but actually move — real cost: $0.0185.
 
 **Airflow — DAG run history**
 
