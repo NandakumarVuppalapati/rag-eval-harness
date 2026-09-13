@@ -36,6 +36,11 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
     AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "false"
     DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-rag_eval}:${POSTGRES_PASSWORD:-rag_eval}@postgres:5432/rag_eval_harness
+    # harness.py can't find data/golden_dataset/ from its own __file__ once
+    # pip installs it into site-packages (see the comment on GOLDEN_DIR in
+    # that file) -- this points it at where the data/ bind mount below
+    # actually lands inside the container.
+    GOLDEN_DATASET_DIR: /opt/airflow/data/golden_dataset
   volumes:
     - ../dags:/opt/airflow/dags:ro
     - ../data:/opt/airflow/data

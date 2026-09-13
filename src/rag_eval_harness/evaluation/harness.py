@@ -19,6 +19,7 @@ questions don't have.
 from __future__ import annotations
 
 import json
+import os
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
@@ -26,7 +27,26 @@ from pathlib import Path
 from typing import Literal
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
-GOLDEN_DIR = REPO_ROOT / "data" / "golden_dataset"
+# REPO_ROOT (four parents up from this file) only lands on the real repo
+# root for a source checkout / editable install (`pip install -e .`), where
+# __file__ is still src/rag_eval_harness/evaluation/harness.py -- that's
+# true for local dev and CI. A real `pip install <package>` (no -e), which
+# is what both docker/Dockerfile and docker/airflow.Dockerfile do, copies
+# this file into site-packages instead, where four-parents-up lands
+# somewhere under the venv, not the repo -- discovered by watching a real
+# Airflow task fail with FileNotFoundError for
+# .../site-packages/../../data/golden_dataset/numeric_questions.json once
+# the DAG's imports were finally fixed (see run_for_embedding_model's
+# docstring below for that saga). data/golden_dataset/ *is* present inside
+# the Airflow containers -- docker-compose.yml bind-mounts the whole repo
+# data/ dir to /opt/airflow/data -- just not where this __file__-relative
+# guess looks for it, hence GOLDEN_DATASET_DIR as an explicit override
+# docker-compose.yml's airflow-common environment block sets.
+GOLDEN_DIR = (
+    Path(os.environ["GOLDEN_DATASET_DIR"])
+    if "GOLDEN_DATASET_DIR" in os.environ
+    else REPO_ROOT / "data" / "golden_dataset"
+)
 
 JUDGE_LLM_MODEL = "gpt-4o-mini"
 JUDGE_EMBED_MODEL = "text-embedding-3-small"
