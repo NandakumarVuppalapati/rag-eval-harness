@@ -1,0 +1,37 @@
+# COPY . . in docker/Dockerfile is meant to bring in scripts/, data/golden_dataset,
+# etc. for ad-hoc use inside the container -- not the local dev environment.
+# Without this file, that COPY also swept in .venv/ (715MB) and data/corpus/
+# (192MB, gitignored raw filings), bloating the build context past 1GB and
+# breaking the image export outright; and, more seriously, .env itself,
+# which would have baked real API keys into an image layer.
+
+.env
+.env.*
+!.env.example
+
+.git/
+.github/
+
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.DS_Store
+*.log
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Large, gitignored, reproducible via scripts/pull_sec_corpus.py -- not
+# needed at runtime (retrieval hits Pinecone, not these raw files).
+data/corpus/
+data/xbrl/
+data/raw/
+data/raw_meta/
+data/index_cache/
