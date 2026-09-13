@@ -57,7 +57,15 @@ services:
       # the `rag_eval_harness` app DB that POSTGRES_DB above creates.
       - ./postgres-init:/docker-entrypoint-initdb.d:ro
     ports:
-      - "5432:5432"
+      # Host-side port only -- every other service in this file talks to
+      # this one over the Docker network as postgres:5432, so remapping
+      # the host side doesn't touch anything internal. 5433 by default
+      # rather than the standard 5432, since that's commonly already
+      # bound by a local Postgres install (Postgres.app, Homebrew, another
+      # project's stack) and Compose fails outright ("address already in
+      # use") rather than picking a free port itself. Override with
+      # POSTGRES_HOST_PORT if 5433 is also taken.
+      - "${POSTGRES_HOST_PORT:-5433}:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rag_eval} -d rag_eval_harness"]
       interval: 5s
