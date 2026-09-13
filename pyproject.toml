@@ -25,7 +25,11 @@ dependencies = [
     "pydantic>=2.9",
     "pydantic-settings>=2.5",
     "python-dotenv>=1.0",
-    "pandas>=2.2",
+    # >=2.1 rather than >=2.2: nothing here actually needs a 2.2+ pandas
+    # feature (it is only imported in a test fixture), and Airflow 2.10.4's
+    # own constraints file (see docker/airflow.Dockerfile) pins pandas
+    # ==2.1.4 -- a >=2.2 floor here made that pip install unresolvable.
+    "pandas>=2.1",
     "pypdf>=5.0",
     "beautifulsoup4>=4.12",
     "lxml>=5.0",
