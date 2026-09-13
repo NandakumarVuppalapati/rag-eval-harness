@@ -133,6 +133,10 @@ def make_judge():
     return llm, embeddings
 
 
+# Keeps Ragas's own concurrent judge calls from outrunning a real (non-enterprise)
+# OpenAI rate-limit tier -- see the comment at its use in score_answerable().
+RAGAS_MAX_WORKERS = 3
+
 _RAGAS_METRIC_NAMES = ["faithfulness", "answer_relevancy", "context_precision", "context_recall"]
 
 
@@ -145,6 +149,7 @@ def score_answerable(results: list[QuestionResult], llm, embeddings) -> dict:
     object -- see the note below)."""
     from ragas import EvaluationDataset, evaluate
     from ragas.metrics import answer_relevancy, context_precision, context_recall, faithfulness
+    from ragas.run_config import RunConfig
 
     if not results:
         return {"per_question": [], "aggregate": {}}
@@ -156,6 +161,16 @@ def score_answerable(results: list[QuestionResult], llm, embeddings) -> dict:
         llm=llm,
         embeddings=embeddings,
         show_progress=False,
+        # Ragas defaults to max_workers=16, which fires up to 16 concurrent
+        # judge calls per metric batch straight at the OpenAI account
+        # running gpt-4o-mini here. Against a real (non-enterprise) rate
+        # limit tier that's enough to trigger sustained 429s -- one real
+        # run took 2h48m almost entirely in Ragas's own retry/backoff before
+        # this was throttled down. RunConfig's exponential backoff (up to
+        # max_wait=60s, max_retries=10) means it still succeeds either way;
+        # this just keeps a real run from spending most of its wall-clock
+        # time being rate-limited instead of actually running.
+        run_config=RunConfig(max_workers=RAGAS_MAX_WORKERS),
     )
     scores_df = ragas_result.to_pandas()
     per_question = []

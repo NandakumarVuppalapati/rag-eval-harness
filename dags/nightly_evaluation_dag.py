@@ -30,6 +30,7 @@ from __future__ import annotations
 import json
 import os
 import sys
+import time
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -115,7 +116,15 @@ def _score_ragas(embedding_model: str, **context) -> str:
     unanswerable_results = [r for r in all_results if r.category == "unanswerable"]
 
     llm, embeddings = make_judge()
+    t0 = time.monotonic()
     run["ragas"] = score_answerable(answerable_results, llm, embeddings)
+    # _run_evaluation wrote ragas_elapsed_s=0.0 (it skips Ragas on purpose --
+    # see the module docstring). This task is where that time is actually
+    # spent, so it's the one that has to record it; the earlier version of
+    # this function never did, which is why every DAG-produced run had a
+    # 0.0 here even though the standalone scripts/score_ragas.py (which
+    # this task otherwise mirrors) always got it right.
+    run["ragas_elapsed_s"] = time.monotonic() - t0
     run["refusal"] = score_refusal(unanswerable_results)
     run["ragas_pending"] = False
 

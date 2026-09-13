@@ -28,7 +28,7 @@ from pathlib import Path
 
 import requests
 
-USER_AGENT = "rag-eval-harness research tech.nandakumar@gmail.com"
+USER_AGENT = "rag-eval-harness research vuppalapatinandakumar@gmail.com"
 _HEADERS = {"User-Agent": USER_AGENT}
 _MIN_REQUEST_INTERVAL_SECONDS = 0.15  # stays well under SEC's 10 req/s limit
 _last_request_time = 0.0
