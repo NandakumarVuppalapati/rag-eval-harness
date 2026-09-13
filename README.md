@@ -87,7 +87,7 @@ Without Docker, `scripts/run_evaluation.py` and `scripts/load_eval_results.py` c
 Working end to end: real ingestion from SEC EDGAR, retrieval + generation over two live Pinecone indexes, the full 66-question golden dataset scored with real Ragas judge calls, Postgres-backed observability, and CI (lint, type-check, tests) green on every push. See [`docs/adr/`](docs/adr/) and the commit history for how it got here, including the real bugs found along the way.
 
 What's next, in rough priority order:
-- Test coverage for the ingestion pipeline (`ingestion/`) is currently the weakest spot in the codebase — it's exercised end-to-end by the real corpus but not unit-tested against fixture filings the way `generation/` and `evaluation/` are.
+- `parsing.py` and `chunking.py` now have fixture-based unit tests (real trimmed excerpts of an actual Apple 10-Q, see `tests/fixtures/`); `embed_and_index.py` and `sec_edgar.py` are still exercised only end-to-end by the real corpus, not unit-tested, since both are thin wrappers around real network calls (Pinecone upsert, SEC EDGAR fetch) that would need to be mocked to test in isolation.
 - A third embedding model in the comparison (the current two-way voyage-finance-2 vs. text-embedding-3-small result is real but only a two-point comparison).
 - Cost and latency as their own regression-tracked metrics alongside the Ragas quality scores, since those are what actually pages someone in a real deployment.
 
