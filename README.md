@@ -82,6 +82,17 @@ This brings up:
 
 Without Docker, `scripts/run_evaluation.py` and `scripts/load_eval_results.py` can be run directly against a local SQLite file — see their `--help` output.
 
+### Screenshots
+
+Real Grafana and Airflow UI, from an actual nightly run against the full stack (both DAG branches completed successfully; total real API spend for this run was $0.6781):
+
+<p>
+  <img src="docs/screenshots/grafana-dashboard.png" alt="Grafana dashboard showing real Ragas scores per embedding model" width="480">
+  <img src="docs/screenshots/airflow-dag-grid.png" alt="Airflow DAG grid showing successful rag_eval_harness_nightly runs" width="480">
+</p>
+
+Grafana panel values (openai vs. voyage): faithfulness 82.2% / 87.0%, answer relevancy 42.6% / 46.3%, context precision 58.3% / 46.1%, context recall 59.4% / 49.3%, refusal rate on unanswerable questions 100% / 100%. Airflow grid: 2 successful runs (max duration 2:48:45 — driven by real OpenAI rate-limit backoff during Ragas judging), 2 failed pre-fix catchup runs kept visible for history.
+
 ## Status
 
 Working end to end: real ingestion from SEC EDGAR, retrieval + generation over two live Pinecone indexes, the full 66-question golden dataset scored with real Ragas judge calls, Postgres-backed observability, and CI (lint, type-check, tests) green on every push. See [`docs/adr/`](docs/adr/) and the commit history for how it got here, including the real bugs found along the way.
