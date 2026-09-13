@@ -206,7 +206,7 @@ def question_results_from_jsonable(raw_results: list[dict]) -> list[QuestionResu
 
 
 def run_for_embedding_model(
-    embedding_model: str,
+    embedding_model: EmbeddingModelName,
     questions: list[dict],
     retriever,
     generator,
