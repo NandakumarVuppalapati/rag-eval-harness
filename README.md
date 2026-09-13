@@ -84,14 +84,45 @@ Without Docker, `scripts/run_evaluation.py` and `scripts/load_eval_results.py` c
 
 ### Screenshots
 
-Real Grafana and Airflow UI, from an actual nightly run against the full stack (both DAG branches completed successfully; total real API spend for this run was $0.6781):
+All from the real, running local stack (not staged/mocked) — a live triggered `rag_eval_harness_nightly` run that completed successfully end to end, for a real API cost of $0.6781.
 
-<p>
-  <img src="docs/screenshots/grafana-dashboard.png" alt="Grafana dashboard showing real Ragas scores per embedding model" width="480">
-  <img src="docs/screenshots/airflow-dag-grid.png" alt="Airflow DAG grid showing successful rag_eval_harness_nightly runs" width="480">
-</p>
+**Grafana — nightly eval quality + live API traffic**
 
-Grafana panel values (openai vs. voyage): faithfulness 82.2% / 87.0%, answer relevancy 42.6% / 46.3%, context precision 58.3% / 46.1%, context recall 59.4% / 49.3%, refusal rate on unanswerable questions 100% / 100%. Airflow grid: 2 successful runs (max duration 2:48:45 — driven by real OpenAI rate-limit backoff during Ragas judging), 2 failed pre-fix catchup runs kept visible for history.
+![Grafana dashboard showing real Ragas scores per embedding model, plus live request rate, latency, and cost panels](docs/screenshots/grafana-dashboard.png)
+
+Per-model Ragas scores (openai vs. voyage): faithfulness 82.2% / 87.0%, answer relevancy 42.6% / 46.3%, context precision 58.3% / 46.1%, context recall 59.4% / 49.3%, refusal rate on unanswerable questions 100% / 100%. The "Live API traffic" row scrapes the FastAPI service's own `/metrics` endpoint every 15s via Prometheus — it's flat here only because no query traffic was sent to the API in this particular 7-day window, not because the panels are fake.
+
+**Airflow — DAG run history**
+
+![Airflow grid view showing two successful rag_eval_harness_nightly runs and two earlier failed pre-fix runs](docs/screenshots/airflow-dag-grid.png)
+
+2 successful runs (max duration 2:48:45 — driven by real OpenAI rate-limit backoff during Ragas judging, not a bug) and 2 failed pre-fix catchup runs, kept visible rather than cleared, as an honest record of the debugging process below.
+
+<details>
+<summary><strong>More screenshots</strong> — DAG dependency graph, live API docs</summary>
+
+<br>
+
+**Airflow — DAG dependency graph**, both embedding-model branches running in parallel:
+
+![Airflow graph view showing the six-task DAG split into parallel openai and voyage branches](docs/screenshots/airflow-dag-graph.png)
+
+**FastAPI — live, auto-generated API docs** at `/docs`, reflecting the real Pydantic request/response models:
+
+![FastAPI Swagger UI showing the /health, /query, and /metrics endpoints with their schemas](docs/screenshots/api-docs.png)
+
+</details>
+
+## Real deployment bugs, found and fixed
+
+Getting the full Docker Compose stack (Postgres, the API, Prometheus, Grafana, Airflow webserver + scheduler) to actually complete a live nightly run — instead of just passing CI — surfaced four real bugs that CI's own checks couldn't see, because none of them build and run the Airflow image end to end:
+
+1. **SQLAlchemy version conflict.** The project's own `sqlalchemy>=2.0` floor conflicted with Airflow 2.10.4's tested `1.4.54`, crashing the webserver and scheduler with a `MappedAnnotationError` on boot. Fixed by lowering the floor to `>=1.4` and pinning Airflow's own SQLAlchemy family via a constraints file trimmed to just that package group ([`1eab607`](https://github.com/NandakumarVuppalapati/rag-eval-harness/commit/1eab607), [`1165580`](https://github.com/NandakumarVuppalapati/rag-eval-harness/commit/1165580), [`11f8588`](https://github.com/NandakumarVuppalapati/rag-eval-harness/commit/11f8588)).
+2. **pandas version conflict**, found while fixing the one above: `pandas>=2.2` clashed with Airflow's own `pandas==2.1.4` constraint. Fixed by lowering the floor to `>=2.1` ([`d86e327`](https://github.com/NandakumarVuppalapati/rag-eval-harness/commit/d86e327)).
+3. **Wrong-location import.** `run_for_embedding_model` lived in `scripts/`, which `docker/airflow.Dockerfile` never copies into the image — invisible to CI's `py_compile`-only DAG check, and only caught by watching a live triggered run fail with `ModuleNotFoundError`. Fixed by moving the function into the package that actually gets `pip install`ed ([`2bf02e5`](https://github.com/NandakumarVuppalapati/rag-eval-harness/commit/2bf02e5)), which then surfaced a real `mypy` type mismatch the moment it entered the one directory CI type-checks ([`f7a95e8`](https://github.com/NandakumarVuppalapati/rag-eval-harness/commit/f7a95e8)).
+4. **Wrong-location data path.** `harness.py` computed its golden-dataset directory as four parents up from `__file__` — correct for an editable/source install, but a real `pip install .` (what the Docker image does) copies the file into `site-packages` and breaks that math, throwing `FileNotFoundError` for a dataset that was actually mounted, just not where the guess landed. Fixed with an explicit `GOLDEN_DATASET_DIR` env override set in `docker-compose.yml` ([`512cb09`](https://github.com/NandakumarVuppalapati/rag-eval-harness/commit/512cb09)).
+
+Each fix was verified against a from-scratch venv simulation mirroring the real image's dependency resolution *before* being pushed, not just re-run through CI — because CI genuinely couldn't have caught any of these four.
 
 ## Status
 
