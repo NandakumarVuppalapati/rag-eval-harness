@@ -35,7 +35,17 @@ dependencies = [
     "lxml>=5.0",
     "tenacity>=9.0",
     "structlog>=24.4",
-    "sqlalchemy>=2.0",
+    # >=1.4 rather than >=2.0: observability/storage.py is written as
+    # SQLAlchemy Core with create_engine(..., future=True), which is
+    # 1.4's documented way to opt into 2.0-style behavior while still
+    # running on 1.4 -- no Mapped[]/ORM-declarative code exists here, so
+    # nothing in this project actually needs 2.0. Airflow 2.10.4's own
+    # constraints file (docker/airflow.Dockerfile) pins sqlalchemy==1.4.54
+    # exactly, because Airflow's *own* ORM models predate 2.0's stricter
+    # declarative mapping; a >=2.0 floor here made that pip install
+    # unresolvable (this is what actually crashed airflow-webserver/
+    # airflow-scheduler with MappedAnnotationError in the first place).
+    "sqlalchemy>=1.4",
     "psycopg2-binary>=2.9",
     "prometheus-client>=0.20",
 ]
