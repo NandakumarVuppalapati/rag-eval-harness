@@ -65,7 +65,15 @@ def _run_evaluation(embedding_model: str, **context) -> str:
     from pinecone import Pinecone
 
     import rag_eval_harness  # noqa: F401  applies the ragas/vertexai compat shim
-    from rag_eval_harness.evaluation.harness import load_golden_dataset, run_for_embedding_model
+    from rag_eval_harness.evaluation.harness import load_golden_dataset
+
+    # run_for_embedding_model lives in scripts/run_evaluation.py, not in the
+    # rag_eval_harness package itself -- it's the aggregate-a-whole-run
+    # wrapper around harness.run_pipeline() that scripts/run_evaluation.py's
+    # own __main__ uses (see that module's docstring: this DAG is a thin
+    # wrapper around it). sys.path already has REPO_ROOT/scripts on it (see
+    # top of this file), so it imports as a plain top-level module here.
+    from run_evaluation import run_for_embedding_model
     from rag_eval_harness.generation.generator import Generator
     from rag_eval_harness.retrieval.retriever import Retriever
 
