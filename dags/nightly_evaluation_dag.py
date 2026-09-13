@@ -38,7 +38,6 @@ from airflow.operators.python import PythonOperator
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "src"))
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 EVAL_RESULTS_DIR = REPO_ROOT / "data" / "eval_results"
 
@@ -64,16 +63,8 @@ def _run_evaluation(embedding_model: str, **context) -> str:
     import voyageai
     from pinecone import Pinecone
 
-    # run_for_embedding_model lives in scripts/run_evaluation.py, not in the
-    # rag_eval_harness package itself -- it's the aggregate-a-whole-run
-    # wrapper around harness.run_pipeline() that scripts/run_evaluation.py's
-    # own __main__ uses (see that module's docstring: this DAG is a thin
-    # wrapper around it). sys.path already has REPO_ROOT/scripts on it (see
-    # top of this file), so it imports as a plain top-level module here.
-    from run_evaluation import run_for_embedding_model
-
     import rag_eval_harness  # noqa: F401  applies the ragas/vertexai compat shim
-    from rag_eval_harness.evaluation.harness import load_golden_dataset
+    from rag_eval_harness.evaluation.harness import load_golden_dataset, run_for_embedding_model
     from rag_eval_harness.generation.generator import Generator
     from rag_eval_harness.retrieval.retriever import Retriever
 

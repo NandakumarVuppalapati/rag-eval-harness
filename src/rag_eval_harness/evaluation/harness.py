@@ -19,7 +19,9 @@ questions don't have.
 from __future__ import annotations
 
 import json
+import time
 from dataclasses import asdict, dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
@@ -201,3 +203,78 @@ def question_results_from_jsonable(raw_results: list[dict]) -> list[QuestionResu
     without re-running retrieval or generation.
     """
     return [QuestionResult(**d) for d in raw_results]
+
+
+def run_for_embedding_model(
+    embedding_model: str,
+    questions: list[dict],
+    retriever,
+    generator,
+    sample: int | None,
+    score_with_ragas: bool = True,
+) -> dict:
+    """Run every golden question through the pipeline once for one
+    embedding model, optionally score it with Ragas, and assemble the
+    aggregate run dict that scripts/run_evaluation.py writes to
+    data/eval_results/<timestamp>_<embedding_model>.json and
+    dags/nightly_evaluation_dag.py's _run_evaluation task produces for its
+    XCom-passed path. Lives here (not in scripts/run_evaluation.py, where
+    it was originally written) because the Airflow image only pip installs
+    this package -- see docker/airflow.Dockerfile -- it never gets a copy
+    of scripts/, and the DAG's own REPO_ROOT computation
+    (Path(__file__).resolve().parent.parent, which is /opt/airflow inside
+    that image, not the repo root) can't be pointed at it either way.
+    scripts/run_evaluation.py now imports this instead of defining its own
+    copy, so its CLI keeps working unchanged.
+    """
+    answerable_qs = [q for q in questions if q["category"] in ANSWERABLE_CATEGORIES]
+    unanswerable_qs = [q for q in questions if q["category"] == "unanswerable"]
+    if sample:
+        answerable_qs = answerable_qs[:sample]
+        unanswerable_qs = unanswerable_qs[: max(1, sample // 4)]
+
+    print(f"\n=== embedding_model={embedding_model}: running {len(answerable_qs)} answerable + "
+          f"{len(unanswerable_qs)} unanswerable questions through the pipeline ===")
+
+    all_results = []
+    t0 = time.monotonic()
+    for i, q in enumerate(answerable_qs + unanswerable_qs):
+        r = run_pipeline(q, retriever, generator, embedding_model=embedding_model)
+        all_results.append(r)
+        kind = "answerable" if q["category"] in ANSWERABLE_CATEGORIES else "unanswerable"
+        print(f"  [{i + 1}/{len(answerable_qs) + len(unanswerable_qs)}] {r.id} ({kind}, {r.category}) "
+              f"refused={r.refused} retrieval={r.retrieval_latency_ms:.0f}ms gen={r.generation_latency_ms:.0f}ms")
+    pipeline_elapsed = time.monotonic() - t0
+
+    answerable_results = [r for r in all_results if r.category in ANSWERABLE_CATEGORIES]
+    unanswerable_results = [r for r in all_results if r.category == "unanswerable"]
+
+    if score_with_ragas:
+        print(f"Pipeline run complete in {pipeline_elapsed:.1f}s. Scoring with Ragas (cross-family OpenAI judge)...")
+        llm, embeddings = make_judge()
+        t1 = time.monotonic()
+        ragas_scores = score_answerable(answerable_results, llm, embeddings)
+        ragas_elapsed = time.monotonic() - t1
+    else:
+        print(f"Pipeline run complete in {pipeline_elapsed:.1f}s. Skipping Ragas scoring (--skip-ragas); "
+              "run scripts/score_ragas.py on the output file to backfill it later.")
+        ragas_scores = {"per_question": [], "aggregate": {}}
+        ragas_elapsed = 0.0
+
+    refusal_scores = score_refusal(unanswerable_results)
+
+    total_generation_cost = sum(r.generation_cost_usd for r in all_results)
+
+    return {
+        "embedding_model": embedding_model,
+        "run_at_utc": datetime.now(timezone.utc).isoformat(),
+        "num_answerable": len(answerable_results),
+        "num_unanswerable": len(unanswerable_results),
+        "pipeline_elapsed_s": pipeline_elapsed,
+        "ragas_elapsed_s": ragas_elapsed,
+        "ragas_pending": not score_with_ragas,
+        "total_generation_cost_usd": total_generation_cost,
+        "ragas": ragas_scores,
+        "refusal": refusal_scores,
+        "raw_results": results_to_jsonable(all_results),
+    }

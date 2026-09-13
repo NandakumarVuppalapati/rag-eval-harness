@@ -30,7 +30,6 @@ import argparse
 import json
 import os
 import sys
-import time
 import warnings
 from datetime import datetime, timezone
 from pathlib import Path
@@ -50,13 +49,8 @@ import voyageai  # noqa: E402
 from pinecone import Pinecone  # noqa: E402
 
 from rag_eval_harness.evaluation.harness import (  # noqa: E402
-    ANSWERABLE_CATEGORIES,
     load_golden_dataset,
-    make_judge,
-    results_to_jsonable,
-    run_pipeline,
-    score_answerable,
-    score_refusal,
+    run_for_embedding_model,
 )
 from rag_eval_harness.generation.generator import Generator  # noqa: E402
 from rag_eval_harness.retrieval.retriever import Retriever  # noqa: E402
@@ -74,66 +68,11 @@ def build_clients():
     return retriever, generator
 
 
-def run_for_embedding_model(
-    embedding_model: str,
-    questions: list[dict],
-    retriever,
-    generator,
-    sample: int | None,
-    score_with_ragas: bool = True,
-) -> dict:
-    answerable_qs = [q for q in questions if q["category"] in ANSWERABLE_CATEGORIES]
-    unanswerable_qs = [q for q in questions if q["category"] == "unanswerable"]
-    if sample:
-        answerable_qs = answerable_qs[:sample]
-        unanswerable_qs = unanswerable_qs[: max(1, sample // 4)]
-
-    print(f"\n=== embedding_model={embedding_model}: running {len(answerable_qs)} answerable + "
-          f"{len(unanswerable_qs)} unanswerable questions through the pipeline ===")
-
-    all_results = []
-    t0 = time.monotonic()
-    for i, q in enumerate(answerable_qs + unanswerable_qs):
-        r = run_pipeline(q, retriever, generator, embedding_model=embedding_model)
-        all_results.append(r)
-        kind = "answerable" if q["category"] in ANSWERABLE_CATEGORIES else "unanswerable"
-        print(f"  [{i + 1}/{len(answerable_qs) + len(unanswerable_qs)}] {r.id} ({kind}, {r.category}) "
-              f"refused={r.refused} retrieval={r.retrieval_latency_ms:.0f}ms gen={r.generation_latency_ms:.0f}ms")
-    pipeline_elapsed = time.monotonic() - t0
-
-    answerable_results = [r for r in all_results if r.category in ANSWERABLE_CATEGORIES]
-    unanswerable_results = [r for r in all_results if r.category == "unanswerable"]
-
-    if score_with_ragas:
-        print(f"Pipeline run complete in {pipeline_elapsed:.1f}s. Scoring with Ragas (cross-family OpenAI judge)...")
-        llm, embeddings = make_judge()
-        t1 = time.monotonic()
-        ragas_scores = score_answerable(answerable_results, llm, embeddings)
-        ragas_elapsed = time.monotonic() - t1
-    else:
-        print(f"Pipeline run complete in {pipeline_elapsed:.1f}s. Skipping Ragas scoring (--skip-ragas); "
-              "run scripts/score_ragas.py on the output file to backfill it later.")
-        ragas_scores = {"per_question": [], "aggregate": {}}
-        ragas_elapsed = 0.0
-
-    refusal_scores = score_refusal(unanswerable_results)
-
-    total_generation_cost = sum(r.generation_cost_usd for r in all_results)
-
-    return {
-        "embedding_model": embedding_model,
-        "run_at_utc": datetime.now(timezone.utc).isoformat(),
-        "num_answerable": len(answerable_results),
-        "num_unanswerable": len(unanswerable_results),
-        "pipeline_elapsed_s": pipeline_elapsed,
-        "ragas_elapsed_s": ragas_elapsed,
-        "ragas_pending": not score_with_ragas,
-        "total_generation_cost_usd": total_generation_cost,
-        "ragas": ragas_scores,
-        "refusal": refusal_scores,
-        "raw_results": results_to_jsonable(all_results),
-    }
-
+# run_for_embedding_model now lives in rag_eval_harness.evaluation.harness
+# (imported above) -- moved there so dags/nightly_evaluation_dag.py can use
+# the exact same function without needing scripts/ inside the Airflow
+# image, which only pip installs this package (see docker/airflow.Dockerfile
+# and the docstring on harness.run_for_embedding_model for the full story).
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
