@@ -29,7 +29,6 @@ os.environ.setdefault("OPENAI_API_KEY", "test-not-a-real-key")
 os.environ.setdefault("ANTHROPIC_API_KEY", "test-not-a-real-key")
 os.environ.setdefault("VOYAGE_API_KEY", "test-not-a-real-key")
 os.environ.setdefault("PINECONE_API_KEY", "test-not-a-real-key")
-os.environ.setdefault("PINECONE_ENVIRONMENT", "us-east-1")
 
 
 @pytest.fixture

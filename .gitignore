@@ -36,3 +36,7 @@ data/raw_meta/index_progress.json
 data/eval_results/*.json
 data/eval_results/*.db
 !data/eval_results/examples/*.json
+
+# coverage artifacts
+.coverage
+htmlcov/

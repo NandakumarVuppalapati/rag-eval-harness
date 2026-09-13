@@ -27,14 +27,11 @@ jobs:
       - name: Lint (ruff)
         run: ruff check .
 
-      - name: Type-check (mypy, informational)
-        # Several of the third-party SDKs here (anthropic, ragas) return
-        # broad unions that mypy narrows more conservatively than the code
-        # actually needs at runtime -- see the errors this currently
-        # surfaces if you drop --continue-on-error locally. Kept in CI as
-        # a visible signal rather than silently dropped, but not blocking
-        # until those are addressed for real.
-        run: mypy src/ || true
+      - name: Type-check (mypy)
+        # Blocking: all findings here were fixed with real code changes
+        # (see the "mypy" commit in the log), not suppressed away, so a
+        # new one showing up here is a real regression worth stopping on.
+        run: mypy src/
 
       - name: Test
         run: pytest tests/ -v
